@@ -1,0 +1,193 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Coupon API",
+      "description": "Endpoints for handling Coupons"
+    }
+  ],
+  "paths": {
+    "/api/v1/coupon": {
+      "get": {
+        "tags": [
+          "Coupon API"
+        ],
+        "summary": "Get all coupons",
+        "description": "For test purpose only: get all coupons to verify data state",
+        "operationId": "getAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CouponEntity"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Coupon API"
+        ],
+        "summary": "Create coupon",
+        "description": "Create coupon defined by: code, usageLimit and targetCountry",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCouponRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCoupon"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coupon/use/{code}": {
+      "post": {
+        "tags": [
+          "Coupon API"
+        ],
+        "summary": "Use coupon",
+        "operationId": "use",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Coupon code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UseCouponResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateCouponRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Case-insensitive coupon code",
+            "example": "WIOSNA",
+            "minLength": 1
+          },
+          "usageLimit": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Coupon usage limit",
+            "example": 5000,
+            "minimum": 0
+          },
+          "targetCountry": {
+            "type": "string",
+            "description": "Country code in ISO 3166-1 alpha-2. Users outside provided country won't be able to use the coupon",
+            "example": "PL",
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "required": [
+          "code",
+          "targetCountry",
+          "usageLimit"
+        ]
+      },
+      "CreateCoupon": {
+        "type": "object",
+        "properties": {
+          "targetCountry": {
+            "type": "string"
+          },
+          "usageLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "UseCouponResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "CouponEntity": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "usageLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usageCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "targetCountry": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    }
+  }
+}
