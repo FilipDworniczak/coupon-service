@@ -18,6 +18,29 @@
   ],
   "paths": {
     "/api/v1/coupon": {
+      "get": {
+        "tags": [
+          "Coupon API"
+        ],
+        "summary": "Get all coupons",
+        "description": "For test purpose only: get all coupons to verify data state",
+        "operationId": "getAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CouponEntity"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Coupon API"
@@ -104,8 +127,8 @@
             "type": "string",
             "description": "Country code in ISO 3166-1 alpha-2. Users outside provided country won't be able to use the coupon",
             "example": "PL",
-            "maxLength": 3,
-            "minLength": 3,
+            "maxLength": 2,
+            "minLength": 2,
             "pattern": "^[A-Z]{2}$"
           }
         },
@@ -118,12 +141,12 @@
       "CreateCoupon": {
         "type": "object",
         "properties": {
+          "targetCountry": {
+            "type": "string"
+          },
           "usageLimit": {
             "type": "integer",
             "format": "int32"
-          },
-          "targetCountry": {
-            "type": "string"
           },
           "code": {
             "type": "string"
@@ -135,6 +158,33 @@
         "properties": {
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "CouponEntity": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "usageLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usageCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "targetCountry": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       }
