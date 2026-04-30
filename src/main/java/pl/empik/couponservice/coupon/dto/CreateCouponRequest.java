@@ -17,7 +17,7 @@ public class CreateCouponRequest implements CreateCoupon {
 
     @Schema(description = "Country code in ISO 3166-1 alpha-2. Users outside provided country won't be able to use the coupon", requiredMode = Schema.RequiredMode.REQUIRED, example = "PL")
     @NotNull(message = "targetCountry cannot be null")
-    @Size(min = 3, max = 3, message = "targetCountry must be a 2-letter uppercase string")
+    @Size(min = 2, max = 2, message = "targetCountry must be a 2-letter uppercase string")
     @Pattern(regexp = "^[A-Z]{2}$", message = "targetCountry must be a 2-letter uppercase string")
     private String targetCountry;
 }

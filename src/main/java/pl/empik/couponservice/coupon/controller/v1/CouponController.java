@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import pl.empik.couponservice.coupon.dto.CreateCoupon;
 import pl.empik.couponservice.coupon.dto.CreateCouponRequest;
 import pl.empik.couponservice.coupon.dto.UseCouponResponse;
+import pl.empik.couponservice.coupon.entity.CouponEntity;
 import pl.empik.couponservice.coupon.service.CouponService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/coupon")
@@ -35,5 +38,11 @@ public class CouponController {
             @PathVariable String code,
             @RequestAttribute("clientIp") String clientIp) {
         return ResponseEntity.ok(couponService.use(code, clientIp));
+    }
+
+    @Operation(summary = "Get all coupons", description = "For test purpose only: get all coupons to verify data state")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CouponEntity>> getAll() {
+        return ResponseEntity.ok(couponService.getAll());
     }
 }

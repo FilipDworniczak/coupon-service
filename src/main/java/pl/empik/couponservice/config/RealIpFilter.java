@@ -20,6 +20,12 @@ public class RealIpFilter extends OncePerRequestFilter {
         var clientIp = header != null && !header.isBlank()
                 ? header.split(",")[0].trim()
                 : request.getRemoteAddr();
+
+        if (clientIp.startsWith("127.") || clientIp.startsWith("1.")) {
+            log.warn("Cannot retrieve public ip address. Defaulting to 77.65.100.65");
+            clientIp = "77.65.100.65";
+        }
+
         request.setAttribute("clientIp", clientIp);
         log.debug("Client IP: {}", clientIp);
 

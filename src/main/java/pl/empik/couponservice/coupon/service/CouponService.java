@@ -12,12 +12,10 @@ import pl.empik.couponservice.coupon.dto.UseCouponResponse;
 import pl.empik.couponservice.coupon.entity.CouponEntity;
 import pl.empik.couponservice.coupon.repository.CouponRepository;
 import pl.empik.couponservice.coupon.service.mapper.CouponMapper;
-import pl.empik.couponservice.exception.CouponCountryNotAllowedException;
-import pl.empik.couponservice.exception.CouponNotFoundException;
-import pl.empik.couponservice.exception.CouponServiceException;
-import pl.empik.couponservice.exception.CouponUsageLimitExceededException;
+import pl.empik.couponservice.exception.*;
 import pl.empik.couponservice.external.IpAddressService;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -30,6 +28,9 @@ public class CouponService {
     @Transactional
     public CreateCoupon create(CreateCouponRequest request) {
         log.info("Creating coupon: {}", request);
+        if (couponRepository.findById(request.getCode()).isPresent()) {
+            throw new CouponAlreadyExistsException("Coupon with code: " + request.getCode() + " already exists");
+        }
         var couponEntity = CouponMapper.toEntity(request);
         var savedEntity = couponRepository.save(couponEntity);
         log.info("Coupon has been created: {}", savedEntity);
@@ -46,6 +47,10 @@ public class CouponService {
             }
         }
         throw new CouponServiceException("Could not apply coupon due to concurrency. Coupon code: " + code);
+    }
+
+    public List<CouponEntity> getAll() {
+        return couponRepository.findAll();
     }
 
     private UseCouponResponse tryUse(String code, String clientIp) {

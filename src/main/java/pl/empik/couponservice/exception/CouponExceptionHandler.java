@@ -31,6 +31,14 @@ public class CouponExceptionHandler {
                 .body(new CouponError(status.value(), e.getMessage()));
     }
 
+    @ExceptionHandler(CouponAlreadyExistsException.class)
+    public ResponseEntity<CouponError> handleCouponAlreadyExistsException(CouponAlreadyExistsException e) {
+        var status = HttpStatus.BAD_REQUEST;
+        return ResponseEntity
+                .status(status)
+                .body(new CouponError(status.value(), e.getMessage()));
+    }
+
     @ExceptionHandler(CouponServiceException.class)
     public ResponseEntity<CouponError> handleCouponServiceException(CouponServiceException e) {
         var status = HttpStatus.INTERNAL_SERVER_ERROR;

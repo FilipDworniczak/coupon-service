@@ -15,3 +15,5 @@ coupon-service:
   external:
     country:
       url: https://api.country.is
+server:
+  address: 127.0.0.1
